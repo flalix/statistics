@@ -12,7 +12,7 @@ knitr::opts_chunk$set(echo = TRUE)
   
 ## Contingency table, statistics and independence
 
-Here we will present a first study about Contingency Table. The classes belonging to the table are compared, and we will infer it they are independent. The statistics that will be used is the chi-square statistics, or better, chi-square hypothesis test.  
+Here we will present a first study about Contingency Table. The classes belonging to the table are compared, and we will infer it they are independent. The statistics that will be used is the chi-square statistics, and also the chi-square hypothesis test.  
 <br><br>
 
 ### Contingency Table  
