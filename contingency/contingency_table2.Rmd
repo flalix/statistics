@@ -2,7 +2,7 @@
 title: "contingency table - chi-square"
 author: "PhD Flavio Lichtenstein"
 date: "2071, July 17th"
-institution: "Biochemistry and Biophysics Laboratory"
+institution: "Biomolecular Lab - Instituto Butantan / SP - Brazil"
 output: html_document
 ---
 
@@ -12,9 +12,8 @@ knitr::opts_chunk$set(echo = TRUE)
   
 ## Contingency table, statistics and independence
 
-Here we will present a first study about Contingency Table, and observe if the classes belonging to the table are independent or not, that means: - are they independent or not? The statistics that we will use is the chi-square statistics, or better, chi-square hypothesis test.  
-  
-<br>
+Here we will present a first study about Contingency Table. The classes belonging to the table are compared, and we will infer it they are independent. The statistics that will be used is the chi-square statistics, or better, chi-square hypothesis test.  
+<br><br>
 
 ### Contingency Table  
   
@@ -23,10 +22,10 @@ Contingency table is a frequency table usually grouping classes versus properpti
 Examples:  
 . Lab tests versus positive/negative results  
 . Gender versus leisures  
-. Grades versus classes of studied hours  
+. Student Grades versus studied hours  
 . Politic groups versus acceptance/rejectance  
 <br>
-All following distributions (tables) have categorical variables and their values are discrete (integers).  
+All following distributions (tables) are categorical variables and their values are discrete (integers).  
 <br><br>
 
 ### Contingency Table 2x3 - One-way table  
@@ -85,8 +84,8 @@ from: <https://www.youtube.com/watch?v=W95BgQCp_rQ>
 $$\begin{array}
 {rrr}
 gender & Smoke & Non-smoke & Marginal Row \\
-Men & X_{1,1} & X_{1,2} & X_1 \\
-Women & X_{2,1} & X_{2,2} & X_2 \\
+Men & X_{1,1} & X_{1,2} & X_1\ or\ X_{men} \\
+Women & X_{2,1} & X_{2,2} & X_2\ or\ X_{women} \\
 Total & X_{smoke} & X_{non} & Total
 \end{array}
 $$
@@ -144,12 +143,12 @@ Lets use R to simulate these tables, calculate the expected values (for an indep
 
 ```{r stat, echo=T}
 
-m = matrix(c(72,44, 34,53), byrow=T, nrow=2, ncol=2)
+dfObs = matrix(c(72,44, 34,53), byrow=T, nrow=2, ncol=2)
 
-rownames(m) = c("men", "women")
-colnames(m) = c("smoke", "not.smoke")
+rownames(dfObs) = c("men", "women")
+colnames(dfObs) = c("smoke", "not.smoke")
 
-print(m)
+print(dfObs)
 
 ```
 
@@ -157,11 +156,11 @@ Then we can calculate the marginal probabilies,
 
 ```{r stat2, echo=T}
 
-tot.men = m[1,1] + m[1,2]
-tot.wom = m[2,1] + m[2,2]
+tot.men = dfObs[1,1] + dfObs[1,2]
+tot.wom = dfObs[2,1] + dfObs[2,2]
 
-tot.smo = m[1,1] + m[2,1]
-tot.not = m[1,2] + m[2,2]
+tot.smo = dfObs[1,1] + dfObs[2,1]
+tot.not = dfObs[1,2] + dfObs[2,2]
 
 total = tot.men + tot.wom
 
@@ -174,7 +173,7 @@ perc.not = tot.not / total
 perc.tot2 = perc.smo + perc.not
 
 
-m2 = cbind(m, tot.gender = c(tot.men, tot.wom), perc.gender = c(perc.men, perc.wom))
+m2 = cbind(dfObs, tot.gender = c(tot.men, tot.wom), perc.gender = c(perc.men, perc.wom))
 m2 = rbind(m2, tot.prop=data.frame(smoke=tot.smo, not.smoke=tot.not, tot.gender=total, perc.gender=perc.tot))
 m2 = rbind(m2, perc.prop=data.frame(smoke=perc.smo, not.smoke=perc.not, tot.gender=perc.tot2, perc.gender=perc.tot))
 
@@ -190,7 +189,7 @@ print(m2)
 -- Quantitative
 
 ```{r stat3, echo=T}
-m2 = cbind(m, tot.gender = c(tot.men, tot.wom))
+m2 = cbind(dfObs, tot.gender = c(tot.men, tot.wom))
 m2 = rbind(m2, tot.prop=data.frame(smoke=tot.smo, not.smoke=tot.not, tot.gender=total))
 
 print(m2)
@@ -200,7 +199,7 @@ print(m2)
 -- Percentage
 
 ```{r stat4, echo=T}
-m2 = cbind(m, perc.gender = c(perc.men, perc.wom))
+m2 = cbind(dfObs, perc.gender = c(perc.men, perc.wom))
 m2 = rbind(m2, perc.prop=data.frame(smoke=perc.smo, not.smoke=perc.not, perc.gender=perc.tot2))
 
 print(m2)
@@ -215,11 +214,11 @@ where, pi and pj are the marginal distribution for a row and for a column, respe
 
 ```{r stat5, echo=T}
 
-m3 = matrix(c(perc.men*perc.smo, perc.men*perc.not, perc.wom*perc.smo, perc.wom*perc.not), byrow=T, nrow=2, ncol=2)
+dfExp = matrix(c(perc.men*perc.smo, perc.men*perc.not, perc.wom*perc.smo, perc.wom*perc.not), byrow=T, nrow=2, ncol=2)
 
 options(digits=3)
-print(m3)
-sum(m3)
+print(dfExp)
+sum(dfExp)
 ```  
 <br>
 As expected, now we can calculate the Expected Values. But what is "expected values". Expected values are values expected if the distribution behaves as an independente distribution (men and women don't interact concerning smoking). Therefore, we should only multiply the indpendent probability matrix times the total.
@@ -228,16 +227,16 @@ As expected, now we can calculate the Expected Values. But what is "expected val
 
 ```{r stat6, echo=T}
 
-m3 = matrix(c(perc.men*perc.smo, perc.men*perc.not, perc.wom*perc.smo, perc.wom*perc.not), byrow=T, nrow=2, ncol=2)
-m3 = round(m3 * total, 1)
+dfExp = matrix(c(perc.men*perc.smo, perc.men*perc.not, perc.wom*perc.smo, perc.wom*perc.not), byrow=T, nrow=2, ncol=2)
+dfExp = round(dfExp * total, 1)
 
 options(digits=1)
 
 cat("The expected values for independent distribution is ...")
-print(m3)
+print(dfExp)
 
-all.equal(total, sum(m3))
-total == sum(m3)
+all.equal(total, sum(dfExp))
+total == sum(dfExp)
 
 ```  
 <br><br>
@@ -258,7 +257,7 @@ Given the Observed Values Distribution:
 
 ```{r stat7, echo=T}
 
-print(m)
+print(dfObs)
 
 ```  
 <br>
@@ -267,7 +266,7 @@ and the Expected Values Distribution (independent distribution),
 
 ```{r stat8, echo=T}
 
-print(m3)
+print(dfExp)
 
 ``` 
 <br>
@@ -280,7 +279,7 @@ the chi-square statistics can be calculated,
 chi.stat = 0
 for (i in 1:2) {
   for (j in 1:2) {
-    val = (m[i,j] - m3[i,j])^2 / m3[i,j]
+    val = (dfObs[i,j] - dfExp[i,j])^2 / dfExp[i,j]
     chi.stat = chi.stat + val
   }
 }
@@ -320,7 +319,7 @@ Lets recalculate using R statitical functionals,
 
 ```{r stat10, echo=T}
 
-s = chisq.test(m)
+s = chisq.test(dfObs)
 print(s)
 
 print(s$statistic)
@@ -335,9 +334,48 @@ if (s$p.value > .05) {
 }
 
 
-``` 
+```  
+  
+<br><br>
+## Odds Ratio  
+<br>
+
+$$Odds = \frac{\frac{a_{1,1}} {a_{1,2}}}{\frac{a_{2,1}} {a_{2,2}}}$$
+
+$$Odds = \frac{\frac{men.smoke} {men.non}}{\frac{wom.smoke} {wom.non}}$$
+
+```{r stat11, echo=T}
+
+print(dfObs)
+
+cat("\n")
+
+odds.men = dfObs[1,1] / dfObs[1,2]
+sprintf("Men Odds is %3.2f.", odds.men)
+
+odds.wom = dfObs[2,1] / dfObs[2,2]
+sprintf("Women Odds is %3.2f.", odds.wom)
 
 
+odds.ratio = odds.men / odds.wom
+sprintf("Odds ratio is %3.2f.", odds.ratio)
+sprintf("That means, men smoke %3.2f times more than women.", odds.ratio)
+
+```
+
+  
+<br><br>
+
+## Challenge:  
+<br>
+- How to calculate df (degree of freedom) for n x m matrix?  
+<br>
+- Which is the statistics for Odds Ratio?  
+<br>
+- What means the Fisher Exact Test? When to use it? How did he got this intuiton?  
+
+
+<br><br>
 
 ## Markdown
 
