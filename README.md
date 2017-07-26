@@ -12,9 +12,9 @@ knitr::opts_chunk$set(echo = TRUE)
   
 ## Contingency table, statistics and independence
 
-Here we will present a first study about Contingency Table, and observe if the classes belonging to the table are independent or not, that means: - are they independent or not? The statistics that we will use is the chi-square statistics, or better, chi-square hypothesis test.
+Here we will present a first study about Contingency Table. The classes belonging to the table will be compared, and we will infer it they are independent. The statistics that will be used is the chi-square statistics, and also the chi-square hypothesis test.  
 
-[a link](https://https://github.com/flalix/statistics/contingency/contingency_table2.md)
+[a link](https://github.com/flalix/statistics/tree/master/contingency/)
   
 <br>
 
@@ -22,8 +22,8 @@ Here we will present a first study about Contingency Table, and observe if the c
   
 ## Two distributions - t-student test (t.test)
 
-Here we will present 2 distributions and makey them close togheter or far appart to observe the sensitivity, specificity and to calculate the ROC.  
+Here we will present 2 distributions and make them close togheter or far appart to observe the sensitivity, specificity and to calculate the ROC (receiver operating curve)    
 <br>
-[a link](https://https://github.com/flalix/statistics/roc/sens_spec_roc.md)
+[a link](https://github.com/flalix/statistics/tree/master/roc/)  
 
 <br><br>
